@@ -33,6 +33,35 @@ Generic steps:
 
 /end night 1 effort   
 
+12. Now that Klipper is setup on the OPi Z2W, I wanted to set up the WiFi connection so I don't *have* to have the OPi plugged in via ethernet.
+   1. I used this command to scan the network list: `nmcli device wifi list`
+   2. Then I used this to connect to my desired WiFi network: `nmcli device wifi connect "<SSID>" password "<yourpassword>"`
+      1. *Note: I was only able to connect to a network only running 2.4GHz*
+   3. I confirmed that it was working with: `ip a | grep wlan`, copy this IP. You'll need it for the next SSH session. You can do a ping if you want to: `ping -c 3 google.com`
+   4. Wifi Setup is complete!
+
+13. Next, I unplugged the ethernet, and navigated to the IP address via web browser to ensure the Mainsail GUI would still connect.
+14. For the next few steps, I found [this great video by Vector 3D on YouTube](https://www.youtube.com/watch?v=N41JY1Gukuk) that went through step-by step how to connect Klipper on the Pi to the control board. I'm using a 4.2.2 board on an Ender 3v2, as well as a 1.1.3 in an original Ender.
+15. Start an SSH session as the non-`root` (`opi`) user. This is where it breaks into two lanes; one for the 4.2.2. board (which I'll be doing first) and the second for the 1.1.3.
+16. ### 4.2.2
+      1. Change directory to klipper `cd ./klipper/`
+      2. Initiate the make menu interface `make menuconfig`
+      3. Set these settings to:
+
+            `-Enable extra low-level configuration options`
+            `-Micro-controller Architecture (STMicroelectronics STM32)`
+            `Processor Model (STM32F103)           # Should already be set correctly`
+            `Bootloader offset (28KiB bootloader)`
+            `Communication interface (Serial (on USART1 PA10/PA9))`
+         
+       5. Open MobaXterm and use the file browser feature to navigate to `/home/user/klipper/out` and grab the `klipper.bin` file, save it to your computer.
+       6. Copy the `klipper.bin` file to the root of an empty SD card, and pop it into the printer (Ender3v2) and restart the printer.
+       7. Go back to MobaXterm, and issue the following command to get your serial ID: `ls /dev/serial/by-id/*`
+       8. Copy this ID. Go to the Mainsail interface (or Fluidd), locate `printer.cfg` and find the `[mcu]` section, and replace the serial ID there with the one you just copied. Save & restart. 
+       9. Find the example config from [This GH repository](https://github.com/Klipper3d/klipper/blob/master/config/printer-creality-ender3-v2-2020.cfg) and then edit it to your requirements. I have a BL touch installed, and made some other changes. I'll have the config file uploaded here.
+          1. *Tip: Use the `BLTOUCH_DEBUG COMMAND=pin_up` and `BLTOUCH_DEBUG COMMAND=pin_down` commands to test the BL Touch before attempting to home the printer.*
+          2. *Tip 2: If you can't get the BL Touch to work, check to see if your board uses a pullup resistor for the signal, and use a `^` before the pin number; eg. `^PB1`*
+      11. 
 
 
 ## Handy Info
