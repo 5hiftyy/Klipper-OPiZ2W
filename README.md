@@ -22,7 +22,7 @@ Generic steps:
 6. Look for the hostname **orangepizero2w**, if you can't find it here, go to your router's client list. Copy this IP.
 7. Open your SSH tool of choice (such as [MobaXterm](https://mobaxterm.mobatek.net/), [Putty](https://www.putty.org/)) and start an SSH session with the IP you just copied.
 8. Login as *root* with the default password being *orangepi*. I strongly suggest you change this after first login, for security purposes.
-   1. Use the command 'passwd' when logged in to prompt the password change.
+   1. Use the command `passwd` when logged in to prompt the password change.
 9. Create new user. I chose "opi". `sudo adduser opi` Set password, run the following command to add your new user to the `sudoers` group `sudo usermod -aG sudo opi` afterwards, end terminal session. 
 10. Start new terminal session with your OrangePi Z2W with the new user+password combination.
 11. Next I'll be installing [KIAUH.](https://github.com/dw-0/kiauh)
